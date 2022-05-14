@@ -100,19 +100,18 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-        <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
-        <Private>False</Private>
+      <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="0Harmony">
-        <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
-        <Private>False</Private>
+      <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\CustomColor.cs" />
-    <Compile Include="HarmonyPatches\SceneTransitionPatch.cs" />
+    <Compile Include="HarmonyPatches\CustomSongColorsPatch.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="CustomSongColorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

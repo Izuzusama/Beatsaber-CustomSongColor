@@ -5,23 +5,27 @@ using System.IO;
 
 namespace CustomSongColor.HarmonyPatches
 {
-    [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), nameof(StandardLevelScenesTransitionSetupDataSO.Init), typeof(string), typeof(IDifficultyBeatmap), typeof(IPreviewBeatmapLevel), typeof(OverrideEnvironmentSettings),
-        typeof(ColorScheme), typeof(GameplayModifiers), typeof(PlayerSpecificSettings), typeof(PracticeSettings), typeof(string), typeof(bool))]
+    [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO))]
     [HarmonyPatch("Init", MethodType.Normal)]
     internal class SceneTransitionPatch
     {
         private static void Prefix(ref IDifficultyBeatmap difficultyBeatmap, ref ColorScheme? overrideColorScheme)
         {
-            Plugin.Log.Debug($"Checking if {difficultyBeatmap.level.songName} has customColor.json");
-            var environmentInfoSO = difficultyBeatmap.GetEnvironmentInfo();
-            var fallbackScheme = overrideColorScheme ?? new ColorScheme(environmentInfoSO.colorScheme);
-            FileInfo customColorJsonFile = null;
+            FileInfo customColorJsonFile;
             // Only process custom level
             if (difficultyBeatmap.level is CustomPreviewBeatmapLevel customLevel)
             {
                 var path = Path.Combine(customLevel.customLevelPath, "customColor.json");
                 customColorJsonFile = new FileInfo(path);
             }
+            else
+            {
+                // Not custom level
+                return;
+            }
+            Plugin.Log.Debug($"Checking if {difficultyBeatmap.level.songName} has customColor.json");
+            var environmentInfoSO = difficultyBeatmap.GetEnvironmentInfo();
+            var fallbackScheme = overrideColorScheme ?? new ColorScheme(environmentInfoSO.colorScheme);
             if (customColorJsonFile == null || !customColorJsonFile.Exists)
             {
                 Plugin.Log.Debug($"{customColorJsonFile.FullName} Not found. Skipping.");
